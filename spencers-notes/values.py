@@ -6,8 +6,15 @@
 # L
 # 1
 
+# NLP -> think topic
+# hugging face q/a (question and answer later)
+# see if can adjust transform layer to align for
+# what we want 
+
 # Player
 # what about TH?
+
+# generate data set through all values
 
 # https://github.com/gamescomputersplay/monopoly/blob/main/classes/board.py
 # https://github.com/intrepidcoder/monopoly/blob/master/classicedition.js
