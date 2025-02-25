@@ -82,4 +82,31 @@ As I mentioned to Christian Young, you don't really have to do "EDA" for the LLM
   * Take a pre-existing dataset ([Spider 1.0](https://www.kaggle.com/datasets/jeromeblanchet/yale-universitys-spider-10-nlp-dataset/code)) and apply transfer learning to a T5 model and show what we learned and what proved to be a problem.
     * ~~OR create our own *small* schema, like 5 tables and populate manually and do a small scale test of transfer learning?~~
 
+
+## 23 Feb 2025
+
+**EDA Presentation**
+* Christian *Young* is still in the process of getting something funtional - working on the modeling portion.
+  * Focusing only on the `Player` table as well
+* Christian *Reza* is working on getting the TAPAS model out of the box and testing it against the soccer_1 dataset, to see if it is already trained on it.
+  * Hopefully it is not and we can prove that the fine tuning/transfer learning is working
+
+**Presentation idea** - present it as an architechiural comparison - different approaches of text-to-sql vs TAPAS' method of using answer coordinates.
+* **TIMING IS GRADED!**
+* Data flow chart to give more context to our project
+* Talk about the challenges of:
+  *  generating new data (Young)
+  * training the a pre-existing model (Reza)
+* Data pre-processing
+  * For each approach, talk about:
+    * Tokenization of data
+    * Creation of training data to feed model and getting answer coordinates (SQA)
+* Overview of data
+  *  `Player` table of `soccer_1` data from ([Spider 1.0](https://www.kaggle.com/datasets/jeromeblanchet/yale-universitys-spider-10-nlp-dataset/code)) on kaggle
+     *  This is what Young and Reza focused on for their EDA assignment
+* Hopefully one of us can get something working before the presentation so that we can talk about more concrete results
+* Lessons learned on using models
+  * Checking the model's abilities off the shelf before trying to mess with fine tuning it
+* Talk about next steps - review the pros and cons and use that to show what may be the preferable route for our project.
+
 ---- 
