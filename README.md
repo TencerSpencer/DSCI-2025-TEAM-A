@@ -110,3 +110,11 @@ As I mentioned to Christian Young, you don't really have to do "EDA" for the LLM
 * Talk about next steps - review the pros and cons and use that to show what may be the preferable route for our project.
 
 ---- 
+
+## 30 Mar 2025
+
+* Discussed mid-semester assignments
+* Built outline on mid-semester presentation
+* Talked more on the next steps and what we want to get done for the final presentation
+
+----  
