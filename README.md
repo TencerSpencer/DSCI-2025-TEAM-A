@@ -118,3 +118,44 @@ As I mentioned to Christian Young, you don't really have to do "EDA" for the LLM
 * Talked more on the next steps and what we want to get done for the final presentation
 
 ----  
+
+## 6 Apr 2025
+
+### Mapping out the days for the final project. (Presenting on the 30th)
+
+* We want to get the work done and make sure **everyone** has a comparable understanding of the project.
+
+#### What do we need to do still
+
+* Fine-tuning the model w/ the right training data
+* Develop a method of testing the accuracy of the model
+  * I believe to do this, we need more testing data so that we can do a train/test split
+  * Instead of testing the accuracy of the model by matching a target query, compare the results of the query. (i.e. instead of comparing the SQL query, compare the retrieved results).
+* RAG improvement for the model, making it more dynamic
+* Deployment strategy (if time permits) - we don't have experience on it
+  * Plotly app? https://plotly.com/examples/dashboards/
+  
+#### Divide and conquer 
+
+* One focus on RAG - **Spencer** and **Young**
+* One focus on fine-tuning/data generation - **Spencer** and **Reza**
+* One focus on deployment strategy - **Young** 
+
+
+#### Misc.
+
+* Looking for a new dataset that has valid relationships already created (soccer_1 data had broken links between tables)
+  * Looking at potentially using the cars_1 spider data since it looks like it has good relationships defined
+* Using this meeting time to get everyone updated on what we did on the mid-semester assignment
+  
+
+#### Goals for Divide and Conquer 
+
+|Goal|Due Date|
+|:----|:------|
+| Status update | **April 13** |
+| Finish technical work | **April 20** |
+| Give us 3 days to create the presentation | **April 27** |
+| Finish final presentation | **April 30** |
+| Finish final presentation (individual) | **May 7** |
+
