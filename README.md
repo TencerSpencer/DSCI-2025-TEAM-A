@@ -159,3 +159,30 @@ As I mentioned to Christian Young, you don't really have to do "EDA" for the LLM
 | Finish final presentation | **April 30** |
 | Finish final presentation (individual) | **May 7** |
 
+----  
+
+## 13 Apr 2025
+
+* Status update from last meeting
+
+### Christian Young
+
+* Looking into the deployment strategy
+* Thinking its still possible to get an app where the user can enter a question and get the results back from the model
+* MVP might be creating the API to hit the model hosted on a server (can be hit w/ CURL or something)
+  * We can ask if this is acceptable, since we are not showing how the user is going to interact w/ the model, but we would be showing the developer how to talk to it via an API.
+  * MVP would be better since we can focus more on the polish of the model to handle more cases and show off its potential
+* What is the requirement vs what is nice-to-have for the UI/UX.
+
+### Christian Reza
+
+* Has a much better understanding on how to train we can train the model to be able to handle more cases that aren't in the training data
+
+### Spencer Thomas
+
+* N/A
+
+## Misc.
+
+* Goal is to get technical work done by the 20th and the following week we will tie it all together and cleaned up and get the git repo set-up as we want and prepped for the presentation.
+* Check that the API route for is acceptable.
