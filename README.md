@@ -268,4 +268,3 @@ Team members: Christian Reza, Christian Young, Spencer Thomas
 * Coordinate to get tfinal project deployed
 * Add a README about general overview of our project - high level
 * Reoganize repo according to [this link](https://resources.experfy.com/bigdata-cloud/manage-your-data-science-project-structure-in-early-stage/)
-* Reoganize Teams Site
