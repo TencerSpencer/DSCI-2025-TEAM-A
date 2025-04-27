@@ -227,3 +227,38 @@ Team members: Christian Reza, Christian Young, Spencer Thomas
   - Correctness, semantics similarity and hallucination are common metrics applied to LLMs
   - May be better to use compare expected sql to outputted sql instead of retrieved data values
 - Organize our MS teams and Git directory structure
+
+
+---
+
+## 27 Apr 2025
+
+### Prep for final presentation updates
+
+* Reza was able to get some metrics reported from the fine-tuned model to present in the final presentation
+* Spencer is creating some more training data for our model to hopefully improve the metrics we are pulling
+* Young has a working example of RAG with out new dataset (cars_1)
+  * Was able to remote Stop-Words which would have inflated *k* sometimes it is 1 or 2 higher
+  * Needs some fixing on the regex on parsing the tables to pass the schema to the model w/ the question
+  * Has cleaned up the noteboook and should now be much more easily integrated w/ other playbooks
+
+### Presentation Outline
+
+* Fine-tuning
+  * New dataset with rich relationships
+  * Talk about the kinds of things we thought about when making the training data
+    * Issues with **Catastrophic Forgetting**
+* Metrics (At the end of fine-tuning)
+  * Talk about accuracy and how it may not be super representitive, i.e. there are several ways to write a SQL query to get the right answer, so exact matches aren't the only thing that matters.
+  * Talk about what we can do to improve the metrics
+* RAG
+  * We are able to get the right target columns to pass to the model, maybe 1 or 2 extra columns (more is better in this case)
+* Deployment Strategy
+  * We are picturing this being a pretty short section
+* Next Steps
+  * Talk about **Transfer Learning** to give a full sentence answer back to the user and be able to generate human readable reports for complex questions
+  * Develop an **UI** w/ our deployment strategy; we have an API
+
+### Goals
+
+* Have slides done to meet w/ Professor by Tuesday
