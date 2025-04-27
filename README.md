@@ -263,7 +263,7 @@ Team members: Christian Reza, Christian Young, Spencer Thomas
 
 * Have slides done to meet w/ Professor by Tuesday (4/29)
 
-#### After Wednesday
+#### After Wednesday (Have done by Saturday May 3)
 
 * Coordinate to get tfinal project deployed
 * Add a README about general overview of our project - high level
