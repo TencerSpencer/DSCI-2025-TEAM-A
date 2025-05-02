@@ -1,0 +1,434 @@
+# Example data to fine-tune the model
+training_data = [
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" ( 
+    MakeId INTEGER PRIMARY KEY, 
+    Model TEXT, 
+    FOREIGN KEY (Model) REFERENCES model_list (Model)
+)
+CREATE TABLE "model_list" ( 
+    ModelId INTEGER PRIMARY KEY, 
+    Maker INTEGER, 
+    Model TEXT UNIQUE,
+    FOREIGN KEY (Maker) REFERENCES car_makers (Id)
+)
+CREATE TABLE "car_makers" ( 
+    Id INTEGER PRIMARY KEY, 
+    Maker TEXT, 
+    FullName TEXT
+)
+### Write an SQL query to answer the question:
+List all unique car models along with their maker full names.""",
+        "target": """
+select DISTINCT(car_names.Model), car_makers.FullName 
+from car_names 
+join model_list on car_names.Model = model_list.Model 
+join car_makers on model_list.Maker = car_makers.Id
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY, 
+    Year INTEGER,
+    FOREIGN KEY (Id) REFERENCES car_names (MakeId)
+)
+CREATE TABLE "car_names" ( 
+    MakeId INTEGER PRIMARY KEY, 
+    Model TEXT,
+    FOREIGN KEY (Model) REFERENCES model_list (Model)
+)
+CREATE TABLE "model_list" (
+    ModelId INTEGER PRIMARY KEY,
+    Maker INTEGER,
+    Model TEXT UNIQUE,
+    FOREIGN KEY (Maker) REFERENCES car_makers (Id)
+)
+CREATE TABLE "car_makers" ( 
+    Id INTEGER PRIMARY KEY,
+    Country TEXT,
+    FOREIGN KEY (Country) REFERENCES countries(CountryId)
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY, 
+    CountryName TEXT
+)
+### Write an SQL query to answer the question:
+Show each car's model, year, and country of origin.""",
+        "target": """
+SELECT car_names.Model, cars_data.Year, countries.CountryName
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+JOIN model_list ON car_names.Model = model_list.Model
+JOIN car_makers ON model_list.Maker = car_makers.Id
+JOIN countries ON car_makers.Country = countries.CountryId
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_makers" ( 
+    Id INTEGER PRIMARY KEY, 
+    FullName TEXT, 
+    Country TEXT,
+    FOREIGN KEY (Country) REFERENCES countries(CountryId)
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY, 
+    CountryName TEXT
+)
+### Write an SQL query to answer the question:
+Find all car makers from Japan.""",
+        "target": """
+SELECT car_makers.FullName
+FROM car_makers
+JOIN countries ON car_makers.Country = countries.CountryId
+WHERE countries.CountryName LIKE 'japan'
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY, 
+    Horsepower TEXT,
+    FOREIGN KEY (Id) REFERENCES car_names (MakeId)
+)
+CREATE TABLE "car_names" ( 
+    MakeId INTEGER PRIMARY KEY, 
+    Model TEXT,
+    FOREIGN KEY (Model) REFERENCES model_list (Model)
+)
+CREATE TABLE "model_list" (
+    ModelId INTEGER PRIMARY KEY,
+    Maker INTEGER,
+    Model TEXT UNIQUE,
+    FOREIGN KEY (Maker) REFERENCES car_makers (Id)
+)
+CREATE TABLE "car_makers" ( 
+    Id INTEGER PRIMARY KEY, 
+    Country TEXT,
+    FOREIGN KEY (Country) REFERENCES countries(CountryId)
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY, 
+    CountryName TEXT
+)
+### Write an SQL query to answer the question:
+What is the average horsepower of cars made in Germany?""",
+        "target": """
+SELECT AVG(CAST(cars_data.Horsepower AS FLOAT)) AS avg_hp
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+JOIN model_list ON car_names.Model = model_list.Model
+JOIN car_makers ON model_list.Maker = car_makers.Id
+JOIN countries ON car_makers.Country = countries.CountryId
+WHERE countries.CountryName LIKE 'Germany'
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_makers" ( 
+    Id INTEGER PRIMARY KEY, 
+    Country TEXT,
+    FOREIGN KEY (Country) REFERENCES countries(CountryId)
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY, 
+    Continent INTEGER
+)
+CREATE TABLE "continents" ( 
+    ContId INTEGER PRIMARY KEY, 
+    Continent TEXT 
+)
+### Write an SQL query to answer the question:
+Which continent has the most car makers?""",
+        "target": """
+SELECT continents.Continent, COUNT(*) AS maker_count
+FROM car_makers
+JOIN countries ON car_makers.Country = countries.CountryId
+JOIN continents ON countries.Continent = continents.ContId
+GROUP BY continents.Continent
+ORDER BY maker_count DESC
+LIMIT 1
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    MPG TEXT,
+    Year INTEGER
+)
+### Write an SQL query to answer the question:
+What is the average MPG per year?""",
+        "target": """
+SELECT Year, AVG(CAST(MPG AS FLOAT)) AS avg_mpg
+FROM cars_data
+GROUP BY Year
+ORDER BY Year
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER
+)
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+What car models have more than 6 cylinders?""",
+        "target": """
+SELECT car_names.Model
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+WHERE cars_data.Cylinders > 6
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_makers" (
+    Id INTEGER PRIMARY KEY,
+    Country TEXT
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY,
+    Continent INTEGER
+)
+CREATE TABLE "continents" (
+    ContId INTEGER PRIMARY KEY,
+    Continent TEXT
+)
+### Write an SQL query to answer the question:
+How many car makers are there in each continent?""",
+        "target": """
+SELECT continents.Continent, COUNT(*) AS maker_count
+FROM car_makers
+JOIN countries ON car_makers.Country = countries.CountryId
+JOIN continents ON countries.Continent = continents.ContId
+GROUP BY continents.Continent
+ORDER BY maker_count DESC
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Weight INTEGER
+)
+CREATE TABLE "model_list" (
+    ModelId INTEGER PRIMARY KEY,
+    Maker INTEGER,
+    Model TEXT UNIQUE
+)
+CREATE TABLE "car_makers" (
+    Id INTEGER PRIMARY KEY,
+    FullName TEXT
+)
+### Write an SQL query to answer the question:
+What is the lightest car made by each maker?""",
+        "target": """
+SELECT car_makers.FullName, MIN(cars_data.Weight) AS lightest
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+JOIN model_list ON car_names.Model = model_list.Model
+JOIN car_makers ON model_list.Maker = car_makers.Id
+GROUP BY car_makers.FullName
+ORDER BY lightest ASC
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Year INTEGER
+)
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+Which car models were released in the 1970s?""",
+        "target": """
+SELECT car_names.Model
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+WHERE Year BETWEEN 1970 AND 1979
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT
+)
+### Write an SQL query to answer the question:
+Find all car models that contain the word 'Civic'.""",
+        "target": """
+SELECT Make
+FROM car_names
+WHERE Make LIKE '%Civic%'
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Accelerate REAL
+)
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+What are the top 3 fastest accelerating cars?""",
+        "target": """
+SELECT car_names.Model, cars_data.Accelerate
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+ORDER BY cars_data.Accelerate ASC
+LIMIT 3
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Weight INTEGER
+)
+CREATE TABLE "model_list" (
+    ModelId INTEGER PRIMARY KEY,
+    Maker INTEGER,
+    Model TEXT
+)
+CREATE TABLE "car_makers" (
+    Id INTEGER PRIMARY KEY,
+    FullName TEXT
+)
+### Write an SQL query to answer the question:
+Which makers have built a car lighter than 2000 pounds?""",
+        "target": """
+SELECT DISTINCT car_makers.FullName
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+JOIN model_list ON car_names.Model = model_list.Model
+JOIN car_makers ON model_list.Maker = car_makers.Id
+WHERE cars_data.Weight < 2000
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Year INTEGER
+)
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+Show me all car models not made in the 1980s.""",
+        "target": """
+SELECT car_names.Model
+FROM cars_data
+JOIN car_names ON cars_data.Id = car_names.MakeId
+WHERE Year < 1980 OR Year > 1989
+""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    MPG TEXT,
+    Cylinders INTEGER,
+    Year INTEGER
+)
+### Write an SQL query to answer the question:
+List all car IDs with MPG listed.""",
+        "target": """SELECT Id FROM cars_data WHERE MPG IS NOT NULL""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+Show all car models.""",
+        "target": """SELECT Model FROM car_names""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Year INTEGER
+)
+### Write an SQL query to answer the question:
+List cars made in 1975.""",
+        "target": """SELECT Id FROM cars_data WHERE Year = 1975""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Model TEXT
+)
+### Write an SQL query to answer the question:
+Show all distinct car models.""",
+        "target": """SELECT DISTINCT Model FROM car_names""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER
+)
+### Write an SQL query to answer the question:
+Find all cars with exactly 8 cylinders.""",
+        "target": """SELECT Id FROM cars_data WHERE Cylinders = 8""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Year INTEGER
+)
+### Write an SQL query to answer the question:
+Get the newest car's year.""",
+        "target": """SELECT MAX(Year) FROM cars_data""",
+    },
+    {
+        "input": "translate English to SQL: What are all the car models?",
+        "target": "SELECT Model FROM car_names",
+    },
+    {
+        "input": "translate English to SQL: List all cars made after 1980.",
+        "target": "SELECT Id FROM cars_data WHERE Year > 1980",
+    },
+    {
+        "input": "translate English to SQL: Show cars that have more than 4 cylinders.",
+        "target": "SELECT Id FROM cars_data WHERE Cylinders > 4",
+    },
+    {
+        "input": "translate English to SQL: Get all model names from the car_names table.",
+        "target": "SELECT Model FROM car_names",
+    },
+    {
+        "input": "translate English to SQL: How many unique models are there?",
+        "target": "SELECT COUNT(DISTINCT Model) FROM car_names",
+    },
+    {
+        "input": "translate English to SQL: Which years are present in the cars_data table?",
+        "target": "SELECT DISTINCT Year FROM cars_data",
+    },
+]
