@@ -345,6 +345,8 @@ JOIN car_names ON cars_data.Id = car_names.MakeId
 WHERE Year < 1980 OR Year > 1989
 """,
     },
+    # Complex queries seemed to have intorduced some catastrophic forgetting in the model on how to handle simple queries.
+    # Adding in more single table queries to help the model learn how to handle them again and rebalance training data.
     {
         "input": """### Given the following table definitions:
 CREATE TABLE "cars_data" (
@@ -431,4 +433,252 @@ Get the newest car's year.""",
         "input": "translate English to SQL: Which years are present in the cars_data table?",
         "target": "SELECT DISTINCT Year FROM cars_data",
     },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    Id INTEGER PRIMARY KEY,
+    Model TEXT,
+    Make TEXT
+)
+### Write an SQL query to answer the question:
+What are all the makes from the model ford?""",
+        "target": """SELECT Make FROM car_names WHERE Model = 'ford'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "continents" (
+    ContId INTEGER PRIMARY KEY,
+    Continent TEXT
+)
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY,
+    CountryName TEXT,
+    Continent INTEGER,
+    FOREIGN KEY REFERENCES continents(contId)
+)
+
+### Write an SQL query to answer the question:
+What country names are part of the European continent?""",
+        "target": """SELECT countries.CountryName FROM countries LEFT JOIN continents ON countries.Continent = continents.ContId WHERE continents.Continent = 'europe'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "countries" (
+    CountryId INTEGER PRIMARY KEY
+)
+
+### Write an SQL query to answer the question:
+How many countries produce vehicles?""",
+        "target": """SELECT COUNT(CountryId) FROM countries""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT
+)
+
+### Write an SQL query to answer the question:
+How many makes start with toyota?""",
+        "target": """SELECT COUNT(Make) FROM car_names WHERE Make LIKE 'toyota %'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT
+)
+
+### Write an SQL query to answer the question:
+How many makes contain the word ford?""",
+        "target": """SELECT COUNT(Make) FROM car_names WHERE Make LIKE '%ford%'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT
+)
+
+### Write an SQL query to answer the question:
+What makes contain the word mustang?""",
+        "target": """SELECT Make FROM car_names WHERE Make LIKE '%mustang%'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "car_makers" (
+    Id INTEGER PRIMARY KEY,
+    Maker TEXT,
+    FullName TEXT
+)
+
+### Write an SQL query to answer the question:
+What is the full name of each Maker?""",
+        "target": """SELECT FullName FROM car_makers""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Horsepower TEXT
+)
+
+### Write an SQL query to answer the question:
+How many cars have an unknown Horsepower?""",
+        "target": """SELECT COUNT(*) FROM cars_data WHERE Horsepower IS NULL""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    Edispl REAL
+)
+
+### Write an SQL query to answer the question:
+What is the largest engine displacement for each cylinder count?""",
+        "target": """SELECT Cylinders, MAX(Edispl) FROM cars_data GROUP BY Cylinders""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER
+)
+
+### Write an SQL query to answer the question:
+How many cars exist per cylinder?""",
+        "target": """SELECT Cylinders, COUNT(*) FROM cars_data GROUP BY Cylinders""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Accelerate REAL
+)
+
+### Write an SQL query to answer the question:
+For all cars, what is the lowest acceleration time?""",
+        "target": """SELECT MIN(Accelerate) FROM cars_data""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    Accelerate REAL
+)
+
+### Write an SQL query to answer the question:
+For all cars, what is the lowest acceleration time per cylinder?""",
+        "target": """SELECT Cylinders, MIN(Accelerate) FROM cars_data GROUP BY Cylinders""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Accelerate REAL,
+    Year INTEGER
+)
+
+### Write an SQL query to answer the question:
+For every year, what is the slowest acceleration time?""",
+        "target": """SELECT YEAR, MIN(Accelerate) FROM cars_data GROUP BY Year""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    Accelerate REAL
+)
+
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT,
+    FOREIGN KEY MakeId REFERENCES cars_data(Id)
+)
+
+### Write an SQL query to answer the question:
+What car make has the highest acceleration four cylinder?""",
+        "target": """SELECT car_names.Make, MAX(cars_data.Accelerate) FROM car_names LEFT JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Cylinders = 4""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    Weight INTEGER
+)
+
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT,
+    FOREIGN KEY MakeId REFERENCES cars_data(Id)
+)
+
+### Write an SQL query to answer the question:
+What make produces the heaviest six cylinder?""",
+        "target": """SELECT car_names.Make, MAX(cars_data.Weight) FROM car_names LEFT JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Cylinders = 6""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    MPG TEXT
+)
+
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT,
+    FOREIGN KEY MakeId REFERENCES cars_data(id)
+)
+
+### Write an SQL query to answer the question:
+What eight cylinder make has the maximum mpg?""",
+        "target": """SELECT car_names.Make, MAX(CAST(cars_data.MPG AS FLOAT)) FROM car_names LEFT JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Cylinders = 8""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    EDispl REAL,
+    Horsepower TEXT
+)
+
+CREATE TABLE "car_names" (
+    MakeId INTEGER PRIMARY KEY,
+    Make TEXT,
+    FOREIGN KEY MakeId REFERENCES cars_data(Id)
+)
+
+### Write an SQL query to answer the question:
+What car has the highest horse power to displacement ratio, excluding any cars that have an unknown Horspower and Engine Displacement?""",
+        "target": """SELECT car_names.Make, cars_data.horsePower, cars_data.Edispl, MIN(CAST(cars_data.horsePower AS FLOAT)/CAST(cars_data.Edispl AS FLOAT)) FROM car_names LEFT JOIN cars_data ON car_names.MakeId = cars_data.Id WHERE cars_data.Edispl IS NOT NULL AND cars_data.Horsepower != 'null'""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    Cylinders INTEGER,
+    MPG TEXT
+)
+
+### Write an SQL query to answer the question:
+How many eight cylinders have a mpg greater than 20?""",
+        "target": """SELECT COUNT(*) FROM cars_data WHERE Cylinders = 8 AND CAST(MPG AS FLOAT) > 20""",
+    },
+    {
+        "input": """### Given the following table definitions:
+CREATE TABLE "cars_data" (
+    Id INTEGER PRIMARY KEY,
+    EDispl REAL,
+    Year TEXT
+)
+
+### Write an SQL query to answer the question:
+What is the greatest engine displacement for every year?""",
+        "target": """SELECT max(EDispl) FROM cars_data GROUP BY YEAR""",
+    }
 ]
