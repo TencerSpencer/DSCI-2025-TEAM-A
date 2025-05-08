@@ -1,3 +1,5 @@
-**/database/*
 **/.venv/*
+**/data/*
 **/Table-Pretraining-main/*
+**/.ipynb_checkpoints/*
+**/fine-tuned-model/*
